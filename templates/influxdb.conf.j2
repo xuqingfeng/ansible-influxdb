@@ -1,0 +1,314 @@
+### Welcome to the InfluxDB configuration file.
+
+# Once every 24 hours InfluxDB will report usage data to usage.influxdata.com
+# The data includes a random ID, os, arch, version, the number of series and other
+# usage data. No data from user databases is ever transmitted.
+# Change this option to true to disable reporting.
+reporting-disabled = {{ influxdb_reporting_disabled }}
+
+# we'll try to get the hostname automatically, but if it the os returns something
+# that isn't resolvable by other servers in the cluster, use this option to
+# manually set the hostname
+# hostname = "localhost"
+hostname = "{{ influxdb_hostname }}"
+
+###
+### [meta]
+###
+### Controls the parameters for the Raft consensus group that stores metadata
+### about the InfluxDB cluster.
+###
+
+[meta]
+  # Where the metadata/raft database is stored
+  dir = "{{ influxdb_meta_dir }}"
+
+  retention-autocreate = {{ influxdb_meta_retention_autocreate }}
+
+  # If log messages are printed for the meta service
+  logging-enabled = {{ influxdb_meta_logging_enabled }}
+  pprof-enabled = {{ influxdb_meta_pprof_enabled }}
+
+  # The default duration for leases.
+  lease-duration = "{{ influxdb_meta_lease_duration }}"
+
+###
+### [data]
+###
+### Controls where the actual shard data for InfluxDB lives and how it is
+### flushed from the WAL. "dir" may need to be changed to a suitable place
+### for your system, but the WAL settings are an advanced configuration. The
+### defaults should work for most systems.
+###
+
+[data]
+  # Controls if this node holds time series data shards in the cluster
+  enabled = {{ influxdb_data_enabled }}
+
+  dir = "{{ influxdb_data_dir }}"
+
+  # These are the WAL settings for the storage engine >= 0.9.3
+  wal-dir = "{{ influxdb_data_wal_dir }}"
+  wal-logging-enabled = {{ influxdb_data_wal_logging_enabled }}
+
+  # Trace logging provides more verbose output around the tsm engine. Turning
+  # this on can provide more useful output for debugging tsm engine issues.
+  # trace-logging-enabled = {{ influxdb_data_trace_logging_enabled }}
+
+  # Whether queries should be logged before execution. Very useful for troubleshooting, but will
+  # log any sensitive data contained within a query.
+  # query-log-enabled = {{ influxdb_data_query_log_enabled }}
+
+  # Settings for the TSM engine
+
+  # CacheMaxMemorySize is the maximum size a shard's cache can
+  # reach before it starts rejecting writes.
+  # cache-max-memory-size = {{ influxdb_data_cache_max_memory_size }}
+
+  # CacheSnapshotMemorySize is the size at which the engine will
+  # snapshot the cache and write it to a TSM file, freeing up memory
+  # cache-snapshot-memory-size = {{ influxdb_data_cache_snapshot_memory_size }}
+
+  # CacheSnapshotWriteColdDuration is the length of time at
+  # which the engine will snapshot the cache and write it to
+  # a new TSM file if the shard hasn't received writes or deletes
+  # cache-snapshot-write-cold-duration = "{{ influxdb_data_cache_snapshot_write_cold_duration }}"
+
+  # MinCompactionFileCount is the minimum number of TSM files
+  # that need to exist before a compaction cycle will run
+  # compact-min-file-count = {{ influxdb_data_compact_min_file_count }}
+
+  # CompactFullWriteColdDuration is the duration at which the engine
+  # will compact all TSM files in a shard if it hasn't received a
+  # write or delete
+  # compact-full-write-cold-duration = "{{ influxdb_data_compact_full_write_cold_duration }}"
+
+  # MaxPointsPerBlock is the maximum number of points in an encoded
+  # block in a TSM file. Larger numbers may yield better compression
+  # but could incur a performance penalty when querying
+  # max-points-per-block = {{ influxdb_data_max_points_per_block }}
+
+###
+### [coordinator]
+###
+### Controls the clustering service configuration.
+###
+
+[coordinator]
+  write-timeout = "{{ influxdb_coordinator_write_timeout }}"
+  max-concurrent-queries = {{ influxdb_coordinator_max_concurrent_queries }}
+  query-timeout = "{{ influxdb_coordinator_query_timeout }}"
+  log-queries-after = "{{ influxdb_coordinator_log_queries_after }}"
+  max-select-point = {{ influxdb_coordinator_max_select_point }}
+  max-select-series = {{ influxdb_coordinator_max_select_series }}
+  max-select-buckets = {{ influxdb_coordinator_max_select_buckets }}
+
+###
+### [retention]
+###
+### Controls the enforcement of retention policies for evicting old data.
+###
+
+[retention]
+  enabled = {{ influxdb_retention_enabled }}
+  check-interval = "{{ influxdb_retention_check_interval }}"
+
+###
+### [shard-precreation]
+###
+### Controls the precreation of shards, so they are available before data arrives.
+### Only shards that, after creation, will have both a start- and end-time in the
+### future, will ever be created. Shards are never precreated that would be wholly
+### or partially in the past.
+
+[shard-precreation]
+  enabled = {{ influxdb_shard_precreation_enabled }}
+  check-interval = "{{ influxdb_shard_precreation_check_interval }}"
+  advance-period = "{{ influxdb_shard_precreation_advance_period }}"
+
+###
+### Controls the system self-monitoring, statistics and diagnostics.
+###
+### The internal database for monitoring data is created automatically if
+### if it does not already exist. The target retention within this database
+### is called 'monitor' and is also created with a retention period of 7 days
+### and a replication factor of 1, if it does not exist. In all cases the
+### this retention policy is configured as the default for the database.
+
+[monitor]
+  store-enabled = {{ influxdb_monitor_store_enabled }} # Whether to record statistics internally.
+  store-database = "{{ influxdb_monitor_store_database }}" # The destination database for recorded statistics
+  store-interval = "{{ influxdb_monitor_store_interval }}" # The interval at which to record statistics
+
+###
+### [admin]
+###
+### Controls the availability of the built-in, web-based admin interface. If HTTPS is
+### enabled for the admin interface, HTTPS must also be enabled on the [http] service.
+###
+
+[admin]
+  enabled = {{ influxdb_admin_enabled }}
+  bind-address = "{{ influxdb_admin_bind_address }}"
+  https-enabled = {{ influxdb_admin_https_enabled }}
+  https-certificate = "{{ influxdb_admin_https_certificate }}"
+
+###
+### [http]
+###
+### Controls how the HTTP endpoints are configured. These are the primary
+### mechanism for getting data into and out of InfluxDB.
+###
+
+[http]
+  enabled = {{ influxdb_http_enabled }}
+  bind-address = "{{ influxdb_http_bind_address }}"
+  auth-enabled = {{influxdb_http_auth_enabled}}
+  log-enabled = {{ influxdb_http_log_enabled }}
+  write-tracing = {{ influxdb_http_write_tracing }}
+  pprof-enabled = {{ influxdb_http_pprof_enabled }}
+  https-enabled = {{ influxdb_http_https_enabled }}
+  https-certificate = "{{ influxdb_http_https_certificate }}"
+  ### Use a separate private key location.
+  # https-private-key = "{{ influxdb_http_https_private_key }}"
+  max-row-limit = {{ influxdb_http_max_row_limit }}
+  realm = "{{ influxdb_http_realm }}"
+
+###
+### [subscriber]
+###
+### Controls the subscriptions, which can be used to fork a copy of all data
+### received by the InfluxDB host.
+###
+
+[subscriber]
+  enabled = {{ influxdb_subscriber_enabled }}
+  # http-timeout = "{{ influxdb_subscriber_http_timeout }}"
+  # write-concurrency = {{ influxdb_subscriber_write_concurrency }}
+  # write-buffer-size = {{ influxdb_subscriber_write_buffer_size }}
+
+
+###
+### [[graphite]]
+###
+### Controls one or many listeners for Graphite data.
+###
+
+[[graphite]]
+  enabled = {{ influxdb_graphite_enabled }}
+  # database = "{{ influxdb_graphite_database }}"
+  # bind-address = "{{ influxdb_graphite_bind_address }}"
+  # protocol = "{{ influxdb_graphite_protocol }}"
+  # consistency-level = "{{ influxdb_graphite_consistency_level }}"
+
+  # These next lines control how batching works. You should have this enabled
+  # otherwise you could get dropped metrics or poor performance. Batching
+  # will buffer points in memory if you have many coming in.
+
+  # batch-size = {{ influxdb_graphite_batch_size }} # will flush if this many points get buffered
+  # batch-pending = {{ influxdb_graphite_batch_pending }} # number of batches that may be pending in memory
+  # batch-timeout = "{{ influxdb_graphite_batch_timeout }}" # will flush at least this often even if we haven't hit buffer limit
+  # udp-read-buffer = {{ influxdb_graphite_udp_read_buffer }} # UDP Read buffer size, 0 means OS default. UDP listener will fail if set above OS max.
+
+  ### This string joins multiple matching 'measurement' values providing more control over the final measurement name.
+  # separator = "{{ influxdb_graphite_separator }}"
+
+  ### Default tags that will be added to all metrics.  These can be overridden at the template level
+  ### or by tags extracted from metric
+  # tags = ["region=us-east", "zone=1c"]
+  {% if influxdb_graphite_tags is defined %}
+  tags = [{{ influxdb_graphite_tags | join(",") }}]
+  {% endif %}
+
+  ### Each template line requires a template pattern.  It can have an optional
+  ### filter before the template and separated by spaces.  It can also have optional extra
+  ### tags following the template.  Multiple tags should be separated by commas and no spaces
+  ### similar to the line protocol format.  There can be only one default template.
+  # templates = [
+  #   "*.app env.service.resource.measurement",
+  #   # Default template
+  #   "server.*",
+  # ]
+  {% if influxdb_graphite_templates is defined %}
+  templates = [{{ influxdb_graphite_templates | join(",") }}]
+  {% endif %}
+
+###
+### [collectd]
+###
+### Controls one or many listeners for collectd data.
+###
+
+[[collectd]]
+  enabled = {{ influxdb_collectd_enabled }}
+  # bind-address = "{{ influxdb_collectd_bind_address }}"
+  # database = "{{ influxdb_collectd_database }}"
+  # typesdb = "{{ influxdb_collectd_typesdb }}"
+
+  # These next lines control how batching works. You should have this enabled
+  # otherwise you could get dropped metrics or poor performance. Batching
+  # will buffer points in memory if you have many coming in.
+
+  # batch-size = {{ influxdb_collectd_batch_size }} # will flush if this many points get buffered
+  # batch-pending = {{ influxdb_collectd_batch_pending }} # number of batches that may be pending in memory
+  # batch-timeout = "{{ influxdb_collectd_batch_timeout }}" # will flush at least this often even if we haven't hit buffer limit
+  # read-buffer = {{ influxdb_collectd_read_buffer }} # UDP Read buffer size, 0 means OS default. UDP listener will fail if set above OS max.
+
+###
+### [opentsdb]
+###
+### Controls one or many listeners for OpenTSDB data.
+###
+
+[[opentsdb]]
+  enabled = {{ influxdb_opentsdb_enabled }}
+  # bind-address = "{{ influxdb_opentsdb_bind_address }}"
+  # database = "{{ influxdb_opentsdb_database }}"
+  # retention-policy = "{{ influxdb_opentsdb_retention_policy }}"
+  # consistency-level = "{{ influxdb_opentsdb_consistency_level }}"
+  # tls-enabled = {{ influxdb_opentsdb_tls_enabled }}
+  # certificate= "{{ influxdb_opentsdb_certificate }}"
+  # log-point-errors = {{ influxdb_opentsdb_log_point_errors }} # Log an error for every malformed point.
+
+  # These next lines control how batching works. You should have this enabled
+  # otherwise you could get dropped metrics or poor performance. Only points
+  # metrics received over the telnet protocol undergo batching.
+
+  # batch-size = {{ influxdb_opentsdb_batch_size }} # will flush if this many points get buffered
+  # batch-pending = {{ influxdb_opentsdb_batch_pending }} # number of batches that may be pending in memory
+  # batch-timeout = "{{ influxdb_opentsdb_batch_timeout }}" # will flush at least this often even if we haven't hit buffer limit
+
+###
+### [[udp]]
+###
+### Controls the listeners for InfluxDB line protocol data via UDP.
+###
+
+[[udp]]
+  enabled = {{ influxdb_udp_enabled }}
+  # bind-address = "{{ influxdb_udp_bind_address }}"
+  # database = "{{ influxdb_udp_database }}"
+  # retention-policy = "{{ influxdb_udp_retention_policy }}"
+
+  # These next lines control how batching works. You should have this enabled
+  # otherwise you could get dropped metrics or poor performance. Batching
+  # will buffer points in memory if you have many coming in.
+
+  # batch-size = {{ influxdb_udp_batch_size }} # will flush if this many points get buffered
+  # batch-pending = {{ influxdb_udp_batch_pending }} # number of batches that may be pending in memory
+  # batch-timeout = "{{ influxdb_udp_timeout }}" # will flush at least this often even if we haven't hit buffer limit
+  # read-buffer = {{ influxdb_udp_read_buffer }} # UDP Read buffer size, 0 means OS default. UDP listener will fail if set above OS max.
+
+  # set the expected UDP payload size; lower values tend to yield better performance, default is max UDP size 65536
+  # udp-payload-size = {{ influxdb_udp_udp_playload_size }}
+
+###
+### [continuous_queries]
+###
+### Controls how continuous queries are run within InfluxDB.
+###
+
+[continuous_queries]
+  log-enabled = {{ influxdb_continuous_queries_log_enabled }}
+  enabled = {{ influxdb_continuous_queries_enabled }}
+  # run-interval = "{{ influxdb_continuous_queries_run_interval }}" # interval for how often continuous queries will be checked if they need to run

@@ -1,0 +1,25 @@
+---
+galaxy_info:
+  author: xuqingfeng
+  description: install, configure and manage Influxdb
+  company: InfluxData
+  license: MIT
+  min_ansible_version: 1.2
+  platforms:
+    - name: EL
+      versions:
+        - 6
+        - 7
+    - name: Ubuntu
+      versions:
+        - trusty
+        - utopic
+        - vivid
+    - name: Debian
+      versions:
+        - jessie
+        - wheezy
+  categories:
+    - database
+    - monitoring
+dependences: []

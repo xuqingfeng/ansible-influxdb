@@ -1,0 +1,12 @@
+---
+- name: Create influxdb.conf
+  template:
+    src: influxdb.conf.j2
+    dest: /etc/influxdb/influxdb.conf
+    backup: true
+
+- name: Start and Enable Influxdb service
+  service:
+    name: influxdb
+    state: restarted
+    enabled: true
