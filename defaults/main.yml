@@ -1,5 +1,4 @@
 ---
-influxdb_version: 1.0.2
 influxdb_arch: "{% if ansible_os_family == 'RedHat' %}x86_64{% elseif ansible_os_family == 'Debian' %}amd64{% endif %}"
 
 # CONFIG
