@@ -1,5 +1,5 @@
 ---
 - name: Install Influxdb from URL [Debian/Ubuntu]
   apt:
-    deb: https://dl.influxdata.com/influxdb/releases/influxdb-{{ influxdb_version }}.{{ influxdb_arch }}.rpm
+    deb: https://dl.influxdata.com/influxdb/releases/influxdb-{{ influxdb_version }}.{{ influxdb_debian_arch }}.rpm
     state: present

@@ -1,5 +1,5 @@
 ---
 - name: Install Influxdb from URL [RHEL/CentOS]
   yum:
-    name: https://dl.influxdata.com/influxdb/releases/influxdb-{{ influxdb_version }}.{{ influxdb_arch }}.rpm
+    name: https://dl.influxdata.com/influxdb/releases/influxdb-{{ influxdb_version }}.{{ influxdb_redhat_arch }}.rpm
     state: present

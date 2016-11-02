@@ -1,5 +1,8 @@
 ---
-# CONFIGURATION
+influxdb_redhat_arch: x86_64
+influxdb_debian_arch: amd64
+
+# CONFIG
 influxdb_reporting_disabled: false
 influxdb_hostname:
 
