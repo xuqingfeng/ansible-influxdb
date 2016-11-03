@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |config|
 
   config.vm.box = "centos/7"
-  #config.vm.box = "ubuntu/trusty64"
+  #config.vm.box = ""
   config.vm.box_check_update = false
 
   BOX_COUNT = 1
