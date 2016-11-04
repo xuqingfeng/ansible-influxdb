@@ -4,8 +4,10 @@
     src: influxdb.conf.j2
     dest: /etc/influxdb/influxdb.conf
     backup: true
+  notify:
+    - Restart influxdb
 
-- name: Start and Enable Influxdb service
+- name: Start and Enable influxdb service
   service:
     name: influxdb
     state: restarted

@@ -7,11 +7,22 @@
 
 `ansible-galaxy install xuqingfeng.influxdb -p roles`
 
-### Test
+### Role Variables
 
-`vagrant up`
+```yaml
+#vars/main.yml
+influxdb_version: 1.0.1 #influxdb version number
 
+#default/main.yml
+#...
+```
 
+### Dependencies
 
+### Example Playbook
 
-
+```yaml
+- hosts: server
+  roles:
+    - xuqingfeng.influxdb
+```

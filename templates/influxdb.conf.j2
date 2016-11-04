@@ -217,7 +217,7 @@ hostname = "{{ influxdb_hostname }}"
   ### or by tags extracted from metric
   # tags = ["region=us-east", "zone=1c"]
   {% if influxdb_graphite_tags is defined %}
-  tags = [{{ influxdb_graphite_tags | join(",") }}]
+  tags = ["{{ influxdb_graphite_tags | join(",") }}"]
   {% endif %}
 
   ### Each template line requires a template pattern.  It can have an optional
@@ -230,7 +230,7 @@ hostname = "{{ influxdb_hostname }}"
   #   "server.*",
   # ]
   {% if influxdb_graphite_templates is defined %}
-  templates = [{{ influxdb_graphite_templates | join(",") }}]
+  templates = ["{{ influxdb_graphite_templates | join(",") }}"]
   {% endif %}
 
 ###
