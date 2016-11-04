@@ -57,7 +57,7 @@ influxdb_admin_https_certificate: /etc/ssl/influxdb.pem
 
 # [http]
 influxdb_http_enabled: 'true'
-influxdb_http_bind_address: ':0886'
+influxdb_http_bind_address: ':8086'
 influxdb_http_auth_enabled: 'false'
 influxdb_http_log_enabled: 'true'
 influxdb_http_write_tracing: 'false'
@@ -89,8 +89,6 @@ influxdb_graphite_tags:
   - 'region=us-east'
   - 'zone=1c'
 influxdb_graphite_templates:
-  - '*.app env.service.resource.measurement'
-  - 'server.*'
 
 # [[collectd]]
 influxdb_collectd_enabled: 'false'
