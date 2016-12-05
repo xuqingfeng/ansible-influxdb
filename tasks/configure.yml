@@ -10,5 +10,5 @@
 - name: Start and Enable influxdb service
   service:
     name: influxdb
-    state: restarted
+    state: started
     enabled: true
