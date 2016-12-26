@@ -216,7 +216,7 @@ hostname = "{{ influxdb_hostname }}"
   ### Default tags that will be added to all metrics.  These can be overridden at the template level
   ### or by tags extracted from metric
   # tags = ["region=us-east", "zone=1c"]
-  {% if influxdb_graphite_tags is defined and influxdb_graphite_tags != None %}
+  {% if influxdb_graphite_tags %}
   tags = ["{{ influxdb_graphite_tags | join('", "') }}"]
   {% endif %}
 
@@ -229,7 +229,7 @@ hostname = "{{ influxdb_hostname }}"
   #   # Default template
   #   "server.*",
   # ]
-  {% if influxdb_graphite_templates is defined and influxdb_graphite_templates != None %}
+  {% if influxdb_graphite_templates %}
   templates = ["{{ influxdb_graphite_templates | join('", "') }}"]
   {% endif %}
 

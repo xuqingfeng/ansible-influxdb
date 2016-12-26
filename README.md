@@ -11,13 +11,11 @@
 
 ```yaml
 #vars/main.yml
-influxdb_version: 1.0.1 #influxdb version number
+influxdb_version: 1.1.1 #influxdb version number; get from https://www.influxdata.com/downloads/
 
 #default/main.yml
 #...
 ```
-
-### Dependencies
 
 ### Example Playbook
 
@@ -26,3 +24,7 @@ influxdb_version: 1.0.1 #influxdb version number
   roles:
     - xuqingfeng.influxdb
 ```
+
+### Docker 
+
+[https://github.com/influxdata/influxdata-docker/tree/master/influxdb](https://github.com/influxdata/influxdata-docker/tree/master/influxdb)

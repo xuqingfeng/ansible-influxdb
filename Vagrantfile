@@ -1,27 +1,23 @@
 Vagrant.configure("2") do |config|
 
   config.vm.box = "centos/7"
-  #config.vm.box = ""
   config.vm.box_check_update = false
+  config.ssh.forward_agent = true
+  config.ssh.insert_key = false
 
-  BOX_COUNT = 1
-  (1..BOX_COUNT).each do | machine_id |
-    config.vm.define "influxdb-#{machine_id}" do | machine |
-      machine.vm.hostname = "influxdb-#{machine_id}"
-      machine.vm.network "private_network", ip: "10.0.233.#{1+machine_id}"
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 1
+    vb.memory = 512
+  end
 
-      machine.vm.provider "virtualbox" do |v|
-        v.memory = 512
-        v.cpus = 1
-      end
+  config.vm.define "influxdb-" do | machine |
+    machine.vm.hostname = "influxdb"
+    machine.vm.network "private_network", ip: "10.0.233.1"
 
-      if machine_id == BOX_COUNT
-        machine.vm.provision "ansible" do |ansible|
-          ansible.sudo = true
-          ansible.playbook = "test.yml"
-        end
-
-      end
+    machine.vm.provision "ansible" do |ansible|
+      ansible.sudo = true
+      ansible.playbook = "test.yml"
     end
   end
+
 end

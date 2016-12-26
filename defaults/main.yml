@@ -1,4 +1,5 @@
 ---
+influxdb_version: 1.0.1
 influxdb_arch: "{% if ansible_os_family == 'RedHat' %}x86_64{% elif ansible_os_family == 'Debian' %}amd64{% endif %}"
 
 # CONFIG
@@ -84,11 +85,9 @@ influxdb_graphite_batch_size: 5000
 influxdb_graphite_batch_pending: 10
 influxdb_graphite_batch_timeout: 1s
 influxdb_graphite_udp_read_buffer: 0
-influxdb_graphite_separator: .
-influxdb_graphite_tags:
-  - 'region=us-east'
-  - 'zone=1c'
-influxdb_graphite_templates:
+influxdb_graphite_separator: '.'
+influxdb_graphite_tags: []
+influxdb_graphite_templates: []
 
 # [[collectd]]
 influxdb_collectd_enabled: 'false'
